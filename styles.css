@@ -95,6 +95,7 @@ body {
     display: flex;
     flex-direction: column;
     position: relative;
+    overflow-x: hidden;
     transition: background-color var(--transition-speed) ease;
 }
 
@@ -1446,6 +1447,12 @@ a {
         font-size: 2.25rem;
     }
     
+    .hero-top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
     /* Stacks project section and projects grid elements */
     .projects-section {
         display: flex !important;
@@ -1501,6 +1508,12 @@ a {
         gap: 16px;
         text-align: center;
         padding-bottom: 40px; /* Space from bottom of screen */
+    }
+    
+    .timezone-sub {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
     }
 }
 
