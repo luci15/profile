@@ -1453,6 +1453,34 @@ a {
         gap: 10px;
     }
     
+    /* Center and shrink avatar elements to match desktop layout scale on mobile */
+    .tile-avatar {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center !important;
+        padding: 24px !important;
+    }
+    
+    .avatar-wrapper {
+        width: 140px !important;
+        height: 140px !important;
+        margin: 0 auto 16px auto !important;
+    }
+    
+    .keycaps-grid {
+        width: 100% !important;
+        max-width: 240px !important;
+        margin: 0 auto 16px auto !important;
+        gap: 8px !important;
+    }
+    
+    .tile-avatar .btn {
+        max-width: 240px !important;
+        margin: 0 auto !important;
+    }
+    
     /* Stacks project section and projects grid elements */
     .projects-section {
         display: flex !important;
