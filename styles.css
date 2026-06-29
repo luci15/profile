@@ -483,7 +483,7 @@ a {
 .avatar-img {
     width: 100%;
     height: 100%;
-    object-cover: cover;
+    object-fit: cover;
     transition: all 0.5s ease;
 }
 
@@ -1412,15 +1412,24 @@ a {
 
 /* Small Handheld Screen Sizes */
 @media (max-width: 768px) {
+    /* Hide interactive background cells to completely eliminate mobile lag */
+    .bg-grid-interactive {
+        display: none !important;
+    }
+
+    /* Convert grid layout to flex column layout to eliminate overlapping and alignment issues */
     .bento-container {
-        grid-template-columns: 1fr;
+        display: flex !important;
+        flex-direction: column !important;
         padding: 0 16px;
-        margin: 20px auto 100px auto; /* Add bottom margin for floating bottom nav */
-        gap: 14px;
+        margin: 20px auto 100px auto; /* Bottom margin space for the floating bottom navigation */
+        gap: 16px;
     }
     
+    /* Reset tile styles to size themselves based on content */
     .tile {
-        grid-column: span 1 !important;
+        width: 100% !important;
+        min-height: auto !important;
         padding: 20px;
     }
     
@@ -1428,12 +1437,23 @@ a {
         font-size: 2.25rem;
     }
     
+    /* Stacks project section and projects grid elements */
+    .projects-section {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        margin-top: 10px;
+    }
+
     .projects-grid {
-        grid-template-columns: 1fr;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 16px;
     }
     
     .tile-project {
-        grid-column: span 1 !important;
+        width: 100% !important;
+        min-height: 280px !important; /* Keep nice height for project items */
     }
     
     .exp-container {
