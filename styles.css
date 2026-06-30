@@ -121,6 +121,7 @@ body {
     border-bottom: 1px dashed var(--border-color);
     background-color: transparent;
     transition: background-color 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    -webkit-tap-highlight-color: transparent;
 }
 
 .bg-grid-cell:hover {
@@ -1479,11 +1480,6 @@ a {
 
 /* Small Handheld Screen Sizes */
 @media (max-width: 768px) {
-    /* Hide interactive background cells to completely eliminate mobile lag */
-    .bg-grid-interactive {
-        display: none !important;
-    }
-
     /* Convert grid layout to clean single column grid layout to prevent stretching and overflow */
     .bento-container {
         display: grid !important;
