@@ -551,4 +551,91 @@ document.addEventListener('DOMContentLoaded', () => {
             logToTerminal(`System: Tile Accent randomized to ${newColor.accent.toUpperCase()}`);
         });
     });
+
+    // ==========================================================================
+    // 8. Morphic Navbar Logic
+    // ==========================================================================
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    function updateNavbarShapes() {
+        navLinks.forEach((link, index) => {
+            const isActive = link.classList.contains('active');
+            const isFirst = index === 0;
+            const isLast = index === navLinks.length - 1;
+            
+            const prevLink = index > 0 ? navLinks[index - 1] : null;
+            const nextLink = index < navLinks.length - 1 ? navLinks[index + 1] : null;
+            
+            const isPrevActive = prevLink && prevLink.classList.contains('active');
+            const isNextActive = nextLink && nextLink.classList.contains('active');
+
+            // Reset shape classes
+            link.classList.remove('round-all', 'round-left', 'round-right', 'no-round');
+
+            if (isActive) {
+                link.classList.add('round-all');
+            } else {
+                const roundLeft = isPrevActive || isFirst;
+                const roundRight = isNextActive || isLast;
+
+                if (roundLeft && roundRight) {
+                    link.classList.add('round-all');
+                } else if (roundLeft) {
+                    link.classList.add('round-left');
+                } else if (roundRight) {
+                    link.classList.add('round-right');
+                } else {
+                    link.classList.add('no-round');
+                }
+            }
+        });
+    }
+
+    // Handle clicks to change active section
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            navLinks.forEach(l => l.classList.remove('active'));
+            link.classList.add('active');
+            updateNavbarShapes();
+        });
+    });
+
+    // Scroll spy logic to dynamically change active link based on scroll position
+    const sections = [
+        document.getElementById('about'),
+        document.getElementById('experience'),
+        document.getElementById('projects'),
+        document.getElementById('game-tile')
+    ];
+
+    function scrollSpy() {
+        let currentSectionId = 'about';
+        const scrollPosition = window.scrollY + 120; // offset for sticky header
+
+        sections.forEach(section => {
+            if (section) {
+                const top = section.offsetTop;
+                const height = section.offsetHeight;
+                if (scrollPosition >= top && scrollPosition < top + height) {
+                    currentSectionId = section.getAttribute('id');
+                }
+            }
+        });
+
+        navLinks.forEach(link => {
+            const href = link.getAttribute('href').substring(1);
+            if (href === currentSectionId) {
+                if (!link.classList.contains('active')) {
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+                    updateNavbarShapes();
+                }
+            }
+        });
+    }
+
+    window.addEventListener('scroll', scrollSpy);
+    // Initial call
+    updateNavbarShapes();
+    scrollSpy();
 });

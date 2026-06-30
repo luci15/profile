@@ -4,6 +4,7 @@
 :root {
     /* Color Palette - Dark Theme (Default) */
     --bg-color: #08090d;
+    --header-bg: rgba(8, 9, 13, 0.7);
     --grid-color: rgba(255, 255, 255, 0.03);
     --tile-bg: rgba(15, 17, 26, 0.7);
     --border-color: rgba(255, 255, 255, 0.08);
@@ -40,6 +41,7 @@
 [data-theme="light"] {
     /* Color Palette - Light Theme */
     --bg-color: #f6f5f0;
+    --header-bg: rgba(246, 245, 240, 0.7);
     --grid-color: rgba(0, 0, 0, 0.03);
     --tile-bg: rgba(255, 255, 255, 0.85);
     --border-color: rgba(0, 0, 0, 0.08);
@@ -141,8 +143,9 @@ a {
     top: 0;
     z-index: 50;
     backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px); /* Safari support */
     border-bottom: 1px dashed var(--border-color);
-    background: rgba(var(--bg-color), 0.7);
+    background: var(--header-bg);
     transition: border var(--transition-speed) ease;
 }
 
@@ -181,11 +184,13 @@ a {
 .nav {
     display: flex;
     align-items: center;
-    gap: 8px;
-    background: rgba(0, 0, 0, 0.05);
+    gap: 0 !important;
+    background: rgba(15, 17, 26, 0.8) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--border-color);
-    padding: 4px;
-    border-radius: 30px;
+    padding: 4px !important;
+    border-radius: 40px !important;
     
     /* Center fixed navigation outside sticky header stack context */
     position: fixed;
@@ -193,21 +198,73 @@ a {
     left: 50%;
     transform: translateX(-50%);
     z-index: 9999;
+    transition: background-color var(--transition-speed) ease;
+}
+
+[data-theme="light"] .nav {
+    background: rgba(255, 255, 255, 0.8) !important;
 }
 
 .nav-link {
-    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem !important;
     font-weight: 500;
-    color: var(--text-secondary);
-    padding: 6px 16px;
-    border-radius: 20px;
-    transition: all 0.2s ease;
+    color: var(--text-secondary) !important;
+    padding: 8px 16px !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    border-radius: 0;
+    background: rgba(255, 255, 255, 0.03);
 }
 
-.nav-link:hover, .nav-link.active {
-    color: var(--text-primary);
-    background: var(--keycap-bg);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+[data-theme="light"] .nav-link {
+    background: rgba(0, 0, 0, 0.03);
+}
+
+.nav-link:hover {
+    color: var(--text-primary) !important;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+[data-theme="light"] .nav-link:hover {
+    background: rgba(0, 0, 0, 0.06);
+}
+
+.nav-link.active {
+    margin: 0 6px !important;
+    background: #ffffff !important; /* White in dark mode */
+    color: #08090d !important;      /* Dark text in dark mode */
+    font-weight: 700 !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .nav-link.active {
+    background: #08090d !important; /* Black in light mode */
+    color: #ffffff !important;      /* White text in light mode */
+}
+
+/* Shape Rounding Helpers (Morphic Morphing Logic) */
+.nav-link.round-all {
+    border-radius: 20px !important;
+}
+
+.nav-link.round-left {
+    border-top-left-radius: 20px !important;
+    border-bottom-left-radius: 20px !important;
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
+.nav-link.round-right {
+    border-top-right-radius: 20px !important;
+    border-bottom-right-radius: 20px !important;
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
+
+.nav-link.no-round {
+    border-radius: 0 !important;
 }
 
 /* Theme Switcher Button */
@@ -1427,20 +1484,31 @@ a {
         display: none !important;
     }
 
-    /* Convert grid layout to flex column layout to eliminate overlapping and alignment issues */
+    /* Convert grid layout to clean single column grid layout to prevent stretching and overflow */
     .bento-container {
-        display: flex !important;
-        flex-direction: column !important;
+        display: grid !important;
+        grid-template-columns: 1fr !important;
         padding: 0 16px;
         margin: 20px auto 100px auto; /* Bottom margin space for the floating bottom navigation */
         gap: 16px;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box;
+        overflow: hidden; /* Prevent horizontal stretching of the entire bento container */
+    }
+
+    /* Reset grid spanning classes to span exactly 1 column on mobile grid */
+    .col-span-1, .col-span-2, .col-span-3, .col-span-4 {
+        grid-column: span 1 / span 1 !important;
     }
     
     /* Reset tile styles to size themselves based on content, excluding marquee badges */
     .tile:not(.tech-marquee-badge) {
         width: 100% !important;
+        min-width: 0 !important; /* Critical to prevent layout stretching */
         min-height: auto !important;
         padding: 20px;
+        box-sizing: border-box;
     }
     
     .hero-title {
@@ -1451,6 +1519,20 @@ a {
         flex-direction: column;
         align-items: flex-start;
         gap: 10px;
+    }
+
+    /* Wrap hero action buttons to prevent horizontal overflow */
+    .hero-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .hero-buttons .btn {
+        flex: 1 1 140px; /* Wraps nicely and stretches to fill row space on mobile */
+        justify-content: center;
     }
     
     /* Center and shrink avatar elements to match desktop layout scale on mobile */
@@ -1490,14 +1572,23 @@ a {
     }
 
     .projects-grid {
-        display: flex !important;
-        flex-direction: column !important;
+        display: grid !important;
+        grid-template-columns: 1fr !important;
         gap: 16px;
+        width: 100% !important;
     }
     
     .tile-project {
         width: 100% !important;
-        min-height: 280px !important; /* Keep nice height for project items */
+        min-width: 0 !important; /* Critical to prevent layout stretching */
+        min-height: auto !important; /* Let project tiles resize dynamically */
+    }
+
+    /* Prevent code blocks in projects from stretching cards horizontally */
+    .project-code-preview pre {
+        max-width: 100%;
+        overflow-x: auto;
+        white-space: pre;
     }
     
     .exp-container {
@@ -1521,6 +1612,21 @@ a {
     .exp-tab-btn {
         flex: 0 0 auto;
     }
+
+    /* Wrap work experience tab headers to prevent vertical overflow/stretching */
+    .exp-header {
+        flex-wrap: wrap !important;
+        align-items: flex-start !important;
+        gap: 8px !important;
+    }
+
+    .exp-role {
+        width: 100%; /* Direct role name to take full width when wrapped */
+    }
+
+    .exp-date {
+        font-size: 0.8rem;
+    }
     
     .form-row {
         flex-direction: column;
@@ -1535,13 +1641,43 @@ a {
         flex-direction: column;
         gap: 16px;
         text-align: center;
-        padding-bottom: 40px; /* Space from bottom of screen */
+        padding-bottom: 80px; /* Space for the floating bottom navigation */
     }
     
     .timezone-sub {
         flex-direction: column;
         align-items: flex-start;
         gap: 8px;
+    }
+
+    /* Vertical stack for game controls (Shuffle/Auto-Solve) to keep centered and within bounds */
+    .game-controls {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 10px !important;
+        width: 100%;
+    }
+
+    .game-controls .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .game-status-msg {
+        margin: 0 !important;
+        text-align: center;
+        font-size: 1.1rem;
+    }
+
+    /* Wrap console preset buttons so they fit without pushing layout wider */
+    .console-presets {
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+    }
+
+    .preset-btn {
+        flex: 1 1 auto;
+        text-align: center;
     }
 }
 
@@ -1565,48 +1701,57 @@ a {
         transform: translateX(-50%);
         z-index: 100;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-        background: rgba(15, 17, 26, 0.88);
+        background: rgba(15, 17, 26, 0.8) !important;
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
         border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 40px;
-        padding: 4px;
+        border-radius: 40px !important;
+        padding: 4px !important;
         width: calc(100% - 32px);
         max-width: 380px;
         display: flex;
         justify-content: space-around;
-        gap: 0;
+        gap: 0 !important;
         pointer-events: auto; /* Active click zones */
     }
     
     /* Ensure light theme works on floating bar */
     [data-theme="light"] .nav {
-        background: rgba(255, 255, 255, 0.88);
+        background: rgba(255, 255, 255, 0.8) !important;
         border: 1px solid rgba(0, 0, 0, 0.12);
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     }
     
     .nav-link {
-        padding: 8px 12px;
-        font-size: 0.78rem;
-        border-radius: 20px;
+        padding: 8px 6px !important; /* Slightly narrower padding to prevent wrapping on tiny phones */
+        font-size: 0.78rem !important;
         flex-grow: 1;
         text-align: center;
-        transition: all 0.2s ease;
-    }
-    
-    .nav-link:hover, .nav-link.active {
-        background: var(--keycap-bg);
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
     }
 }
 
-/* Graceful wrap on very small screen sizes */
+/* Graceful wrap & font scaling on very small screen sizes */
 @media (max-width: 480px) {
     .exp-header {
         flex-wrap: wrap;
         align-items: flex-start;
         gap: 6px;
+    }
+    
+    .hero-title {
+        font-size: 1.85rem !important;
+    }
+
+    .sec-title {
+        font-size: 1.65rem !important;
+    }
+
+    .time-digital {
+        font-size: 1.6rem !important;
+    }
+
+    .logo-text {
+        font-size: 1.1rem !important;
     }
 }
 
