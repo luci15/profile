@@ -317,7 +317,141 @@ document.addEventListener('DOMContentLoaded', () => {
         logToTerminal("System Status: Shuffling game board.");
     }
 
-    // Auto-Solve Cheat (Smoothly returns tiles to position)
+    // Manhattan distance heuristic for 8-puzzle (sum of distance of tiles from goal positions)
+    function getManhattanDistance(state) {
+        let distance = 0;
+        for (let i = 0; i < 9; i++) {
+            const val = state[i];
+            if (val !== null) {
+                const targetIdx = val - 1;
+                const targetRow = Math.floor(targetIdx / 3);
+                const targetCol = targetIdx % 3;
+                
+                const currentRow = Math.floor(i / 3);
+                const currentCol = i % 3;
+                
+                distance += Math.abs(currentRow - targetRow) + Math.abs(currentCol - targetCol);
+            }
+        }
+        return distance;
+    }
+
+    // A* Search algorithm to solve the 8-puzzle starting from any solvable board state
+    function solve8Puzzle(startState) {
+        const goalStateStr = "1,2,3,4,5,6,7,8,null";
+        
+        const serialize = (s) => s.map(v => v === null ? 'null' : v).join(',');
+        const deserialize = (str) => str.split(',').map(v => v === 'null' ? null : parseInt(v, 10));
+        
+        const startStr = serialize(startState);
+        if (startStr === goalStateStr) return [];
+        
+        const openSet = [];
+        const openMap = new Map();
+        const closedSet = new Set();
+        const parentMap = new Map();
+        
+        const startH = getManhattanDistance(startState);
+        const startNode = {
+            stateStr: startStr,
+            g: 0,
+            h: startH,
+            f: startH
+        };
+        
+        openSet.push(startNode);
+        openMap.set(startStr, startNode);
+        
+        let iterations = 0;
+        
+        while (openSet.length > 0) {
+            iterations++;
+            if (iterations > 8000) {
+                break;
+            }
+            
+            // Find node with lowest f score
+            let lowestIdx = 0;
+            for (let i = 1; i < openSet.length; i++) {
+                if (openSet[i].f < openSet[lowestIdx].f) {
+                    lowestIdx = i;
+                }
+            }
+            
+            const current = openSet[lowestIdx];
+            openSet.splice(lowestIdx, 1);
+            openMap.delete(current.stateStr);
+            closedSet.add(current.stateStr);
+            
+            if (current.stateStr === goalStateStr) {
+                const path = [];
+                let curr = goalStateStr;
+                while (parentMap.has(curr)) {
+                    path.push(deserialize(curr));
+                    curr = parentMap.get(curr);
+                }
+                path.reverse();
+                return path;
+            }
+            
+            const currentState = deserialize(current.stateStr);
+            const emptyIndex = currentState.indexOf(null);
+            const validSwaps = getValidMoves(emptyIndex);
+            
+            for (const swapIdx of validSwaps) {
+                const nextState = [...currentState];
+                nextState[emptyIndex] = nextState[swapIdx];
+                nextState[swapIdx] = null;
+                
+                const nextStr = serialize(nextState);
+                if (closedSet.has(nextStr)) continue;
+                
+                const g = current.g + 1;
+                const h = getManhattanDistance(nextState);
+                const f = g + h;
+                
+                const existing = openMap.get(nextStr);
+                if (!existing || g < existing.g) {
+                    if (existing) {
+                        existing.g = g;
+                        existing.f = f;
+                        parentMap.set(nextStr, current.stateStr);
+                    } else {
+                        const newNode = { stateStr: nextStr, g, h, f };
+                        openSet.push(newNode);
+                        openMap.set(nextStr, newNode);
+                        parentMap.set(nextStr, current.stateStr);
+                    }
+                }
+            }
+        }
+        
+        return null; // Fallback / unsolvable state
+    }
+
+    // Animates the step-by-step resolution of the sliding tile puzzle
+    function animateAutoSolve(path) {
+        if (path.length === 0) {
+            isGameActive = false;
+            checkWin();
+            btnShuffle.disabled = false;
+            btnSolve.disabled = false;
+            return;
+        }
+
+        const nextState = path.shift();
+        boardState = nextState;
+        moves++;
+        renderBoard();
+
+        logToTerminal(`Auto-Align: Move #${moves}`);
+
+        setTimeout(() => {
+            animateAutoSolve(path);
+        }, 220); // 220ms per move for snappy, tactile sliding
+    }
+
+    // Auto-Solve Cheat (Animates moves from the current user state to solved state)
     function autoSolve() {
         if (!isGameActive) return;
 
@@ -325,17 +459,17 @@ document.addEventListener('DOMContentLoaded', () => {
         btnShuffle.disabled = true;
         btnSolve.disabled = true;
 
-        // Solve step by step (simulate reverse shuffling)
-        setTimeout(() => {
-            boardState = [1, 2, 3, 4, 5, 6, 7, 8, null];
-            moves += 15; // Penalty moves
-            isGameActive = false;
-            renderBoard();
-            checkWin();
+        const path = solve8Puzzle(boardState);
 
+        if (path && path.length > 0) {
+            animateAutoSolve(path);
+        } else {
+            // Already solved or fallback
+            isGameActive = false;
+            checkWin();
             btnShuffle.disabled = false;
             btnSolve.disabled = false;
-        }, 1200);
+        }
     }
 
     btnShuffle.addEventListener('click', shuffleBoard);
