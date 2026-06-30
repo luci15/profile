@@ -446,7 +446,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const cellSize = 80;
         const cols = Math.ceil(window.innerWidth / cellSize);
-        const rows = Math.ceil(Math.max(window.innerHeight, document.documentElement.scrollHeight) / cellSize);
+        const rows = Math.ceil(window.innerHeight / cellSize);
         const totalCells = cols * rows;
 
         bgGrid.style.gridTemplateColumns = `repeat(${cols}, 80px)`;
