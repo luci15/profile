@@ -1497,6 +1497,19 @@ a {
     .col-span-1, .col-span-2, .col-span-3, .col-span-4 {
         grid-column: span 1 / span 1 !important;
     }
+
+    /* Mobile Order overrides for bento items */
+    .tile-hero { order: 1; }
+    .tile-avatar { order: 2; }
+    .tech-marquee-bento-tile { order: 3; }
+    .tile-timezone { order: 4; }
+    .tile-spotify { order: 5; }
+    .tile-stack { order: 6; }
+    .tile-console { order: 7; }
+    .tile-game { order: 8; }
+    .tile-experience { order: 9; }
+    .projects-section { order: 10; }
+    .tile-contact { order: 11; }
     
     /* Reset tile styles to size themselves based on content, excluding marquee badges */
     .tile:not(.tech-marquee-badge) {
@@ -1862,7 +1875,7 @@ a {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw;
+    width: 100%;
     height: 100vh;
     background: #08090d; /* Premium deep dark background */
     z-index: 99999; /* Ensure it stays on top of everything */
@@ -1871,6 +1884,7 @@ a {
     align-items: center;
     transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.5s;
     pointer-events: all;
+    cursor: pointer;
 }
 
 [data-theme="light"] #preloader {

@@ -19,16 +19,38 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     if (preloader && preloaderText) {
-        document.body.style.overflow = 'hidden'; // Disable scroll during load
         let index = 0;
+        let preloaderDismissed = false;
+
+        function dismissPreloader() {
+            if (preloaderDismissed) return;
+            preloaderDismissed = true;
+            preloader.classList.add('fade-out');
+            setTimeout(() => {
+                preloader.remove();
+            }, 500);
+        }
+
+        // Skip loading on tap/click
+        preloader.addEventListener('click', dismissPreloader);
+
+        // Delay registering scroll skip to allow browser scroll restoration to finish
+        setTimeout(() => {
+            if (preloaderDismissed) return;
+            const initialScrollY = window.scrollY;
+            function handleScrollSkip() {
+                if (Math.abs(window.scrollY - initialScrollY) > 20) {
+                    dismissPreloader();
+                    window.removeEventListener('scroll', handleScrollSkip);
+                }
+            }
+            window.addEventListener('scroll', handleScrollSkip);
+        }, 250);
 
         function showGreeting() {
+            if (preloaderDismissed) return;
             if (index >= greetings.length) {
-                preloader.classList.add('fade-out');
-                document.body.style.overflow = ''; // Enable scroll
-                setTimeout(() => {
-                    preloader.remove();
-                }, 500);
+                dismissPreloader();
                 return;
             }
 
@@ -37,10 +59,12 @@ document.addEventListener('DOMContentLoaded', () => {
             preloaderText.classList.add('animate-in');
 
             setTimeout(() => {
+                if (preloaderDismissed) return;
                 preloaderText.classList.remove('animate-in');
                 preloaderText.classList.add('animate-out');
 
                 setTimeout(() => {
+                    if (preloaderDismissed) return;
                     index++;
                     showGreeting();
                 }, 180); // Exit animation delay
