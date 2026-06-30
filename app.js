@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================================================
     const preloader = document.getElementById('preloader');
     const preloaderText = document.getElementById('preloader-text');
-    
+
     const greetings = [
         { text: "Hello", language: "English" },
         { text: "नमस्ते", language: "Hindi" },
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (preloader && preloaderText) {
         document.body.style.overflow = 'hidden'; // Disable scroll during load
         let index = 0;
-        
+
         function showGreeting() {
             if (index >= greetings.length) {
                 preloader.classList.add('fade-out');
@@ -31,22 +31,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 }, 500);
                 return;
             }
-            
+
             preloaderText.textContent = greetings[index].text;
             preloaderText.classList.remove('animate-out');
             preloaderText.classList.add('animate-in');
-            
+
             setTimeout(() => {
                 preloaderText.classList.remove('animate-in');
                 preloaderText.classList.add('animate-out');
-                
+
                 setTimeout(() => {
                     index++;
                     showGreeting();
                 }, 180); // Exit animation delay
             }, 260); // Greeting display duration
         }
-        
+
         // Start sequence
         showGreeting();
     }
@@ -378,7 +378,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 logToTerminal(`Engineering Weapons:\n  • TypeScript / JS\n  • React / Next.js\n  • CSS Grid / HSL Design\n  • Node.js / PostgreSQL\n  • WebGL / Three.js`);
                 break;
             case 'contact':
-                logToTerminal(`Coordinates for Vedant Shah:\n  • Email: vedantshah@gmail.com\n  • GitHub: github.com/vedantshah\n  • LinkedIn: linkedin.com/in/vedantshah`);
+                logToTerminal(`Coordinates for Vedant Shah:\n  • Email: vedantsh2005@gmail.com\n  • GitHub: github.com/luci15\n  • LinkedIn: linkedin.com/in/vedantshah`);
                 break;
             case 'about':
                 logToTerminal(`Bento Console v1.0.0\nDesigned with Outfit typography and tactile feedback modules. CSS variables enable custom theme profiles.`);
@@ -562,10 +562,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const isActive = link.classList.contains('active');
             const isFirst = index === 0;
             const isLast = index === navLinks.length - 1;
-            
+
             const prevLink = index > 0 ? navLinks[index - 1] : null;
             const nextLink = index < navLinks.length - 1 ? navLinks[index + 1] : null;
-            
+
             const isPrevActive = prevLink && prevLink.classList.contains('active');
             const isNextActive = nextLink && nextLink.classList.contains('active');
 
