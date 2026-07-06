@@ -797,7 +797,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateNavbarShapes();
     scrollSpy();
     // ==========================================================================
-    // Projects Card Slider Script
+    // Projects Card Slider Script with Custom Spring Physics (Reference: threejs.paris momentum style)
     // ==========================================================================
     const projSliderTrack = document.getElementById('projSliderTrack');
     const projPrevBtn = document.getElementById('projPrev');
@@ -806,6 +806,42 @@ document.addEventListener('DOMContentLoaded', () => {
     const projCards = document.querySelectorAll('.proj-card');
 
     let currentProjIndex = 0;
+    let currentX = 0;
+    let targetX = 0;
+    let velocity = 0;
+    let springAnimId = null;
+
+    function animateSpring() {
+        const stiffness = 0.08; // Control wobbly spring tightness
+        const damping = 0.76;   // Control organic deceleration and bounce
+
+        const force = (targetX - currentX) * stiffness;
+        velocity = (velocity + force) * damping;
+        currentX += velocity;
+
+        if (projSliderTrack) {
+            projSliderTrack.style.transform = `translateX(${currentX}px)`;
+        }
+
+        // Keep running until target is reached and momentum decays
+        if (Math.abs(targetX - currentX) > 0.05 || Math.abs(velocity) > 0.05) {
+            springAnimId = requestAnimationFrame(animateSpring);
+        } else {
+            currentX = targetX;
+            velocity = 0;
+            if (projSliderTrack) {
+                projSliderTrack.style.transform = `translateX(${currentX}px)`;
+            }
+            springAnimId = null;
+        }
+    }
+
+    function triggerSpring(target) {
+        targetX = target;
+        if (!springAnimId) {
+            springAnimId = requestAnimationFrame(animateSpring);
+        }
+    }
 
     function getVisibleCards() {
         const width = window.innerWidth;
@@ -829,10 +865,17 @@ document.addEventListener('DOMContentLoaded', () => {
             if (cardElement) {
                 const cardWidth = cardElement.offsetWidth;
                 const gap = 24; // matching styles.css gap
-                const translateValue = currentProjIndex * (cardWidth + gap);
-                projSliderTrack.style.transform = `translateX(-${translateValue}px)`;
+                const newTargetX = -currentProjIndex * (cardWidth + gap);
+                triggerSpring(newTargetX);
             }
         } else {
+            if (springAnimId) {
+                cancelAnimationFrame(springAnimId);
+                springAnimId = null;
+            }
+            currentX = 0;
+            targetX = 0;
+            velocity = 0;
             projSliderTrack.style.transform = 'none';
         }
 

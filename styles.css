@@ -2068,7 +2068,6 @@ a {
 .proj-slider-track {
     display: flex;
     gap: 24px;
-    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     will-change: transform;
 }
 
