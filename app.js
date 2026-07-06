@@ -796,4 +796,119 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initial call
     updateNavbarShapes();
     scrollSpy();
+    // ==========================================================================
+    // Projects Card Slider Script
+    // ==========================================================================
+    const projSliderTrack = document.getElementById('projSliderTrack');
+    const projPrevBtn = document.getElementById('projPrev');
+    const projNextBtn = document.getElementById('projNext');
+    const projDots = document.querySelectorAll('#projDots .proj-dot');
+    const projCards = document.querySelectorAll('.proj-card');
+
+    let currentProjIndex = 0;
+
+    function getVisibleCards() {
+        const width = window.innerWidth;
+        if (width <= 768) return 1;
+        if (width <= 1024) return 2;
+        return 3;
+    }
+
+    function updateProjSlider() {
+        if (!projSliderTrack) return;
+        const visible = getVisibleCards();
+        const maxIndex = Math.max(0, projCards.length - visible);
+        
+        // Clamp index
+        if (currentProjIndex > maxIndex) currentProjIndex = maxIndex;
+        if (currentProjIndex < 0) currentProjIndex = 0;
+
+        // Slide transform calculation
+        if (window.innerWidth > 768) {
+            const cardElement = projCards[0];
+            if (cardElement) {
+                const cardWidth = cardElement.offsetWidth;
+                const gap = 24; // matching styles.css gap
+                const translateValue = currentProjIndex * (cardWidth + gap);
+                projSliderTrack.style.transform = `translateX(-${translateValue}px)`;
+            }
+        } else {
+            projSliderTrack.style.transform = 'none';
+        }
+
+        // Update dots
+        projDots.forEach((dot, idx) => {
+            if (idx === currentProjIndex) {
+                dot.classList.add('active');
+            } else {
+                dot.classList.remove('active');
+            }
+        });
+
+        // Update arrows disabled state
+        if (projPrevBtn && projNextBtn) {
+            projPrevBtn.style.opacity = currentProjIndex === 0 ? '0.4' : '1';
+            projPrevBtn.style.pointerEvents = currentProjIndex === 0 ? 'none' : 'auto';
+            projNextBtn.style.opacity = currentProjIndex === maxIndex ? '0.4' : '1';
+            projNextBtn.style.pointerEvents = currentProjIndex === maxIndex ? 'none' : 'auto';
+        }
+    }
+
+    // Prev / Next Listeners
+    if (projPrevBtn) {
+        projPrevBtn.addEventListener('click', () => {
+            currentProjIndex--;
+            updateProjSlider();
+        });
+    }
+
+    if (projNextBtn) {
+        projNextBtn.addEventListener('click', () => {
+            currentProjIndex++;
+            updateProjSlider();
+        });
+    }
+
+    // Dot Clicks
+    projDots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            const visible = getVisibleCards();
+            const maxIndex = Math.max(0, projCards.length - visible);
+            currentProjIndex = Math.min(index, maxIndex);
+            updateProjSlider();
+        });
+    });
+
+    // Handle Mobile Swipe Syncing Dots
+    const viewport = document.querySelector('.proj-slider-viewport');
+    if (viewport) {
+        viewport.addEventListener('scroll', () => {
+            if (window.innerWidth <= 768) {
+                const scrollLeft = viewport.scrollLeft;
+                const cardWidth = projCards[0]?.offsetWidth || 1;
+                const activeIndex = Math.round(scrollLeft / cardWidth);
+                projDots.forEach((dot, idx) => {
+                    if (idx === activeIndex) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
+                });
+                currentProjIndex = activeIndex;
+            }
+        });
+    }
+
+    // Resize updates
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 768 && projSliderTrack && viewport) {
+            // Reset mobile scroll position if transitioning to desktop
+            viewport.scrollLeft = 0;
+        }
+        updateProjSlider();
+    });
+
+    // Init
+    updateProjSlider();
 });
+

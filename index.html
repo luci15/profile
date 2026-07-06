@@ -752,111 +752,137 @@
             </div>
         </section>
 
-        <!-- Projects Grid Section -->
+        <!-- Projects Card Slider Section -->
         <section class="projects-section col-span-3" id="projects">
-            <div class="section-intro">
-                <span class="tile-tag">Creations</span>
-                <h2 class="sec-title">Core Projects & Works</h2>
-                <p class="sec-subtitle">A collection of custom interactive products. Click cards to view source code.
-                </p>
+            <div class="proj-slider-header">
+                <div>
+                    <span class="tile-tag">Creations</span>
+                    <h2 class="sec-title">Core Projects &amp; Works</h2>
+                </div>
+                <div class="proj-slider-arrows">
+                    <button class="proj-arrow" id="projPrev" aria-label="Previous">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                    </button>
+                    <button class="proj-arrow" id="projNext" aria-label="Next">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                    </button>
+                </div>
             </div>
 
-            <div class="projects-grid">
+            <div class="proj-slider-viewport">
+                <div class="proj-slider-track" id="projSliderTrack">
 
-                <!-- Project 1: Kokonut UI -->
-                <div class="tile tile-project col-span-2">
-                    <div class="project-header">
-                        <div class="project-tags">
-                            <span class="proj-tag cyan">React</span>
-                            <span class="proj-tag orange">Framer Motion</span>
+                    <!-- Card 1: MechFind -->
+                    <div class="proj-card">
+                        <div class="proj-card-img">
+                            <video autoplay loop muted playsinline poster="images/mechfind_hero.png" class="proj-card-video">
+                                <source src="images/hyundai_sedan.mp4" type="video/mp4">
+                            </video>
+                            <span class="proj-card-badge">⚡ MECHFIND</span>
                         </div>
-                        <span class="project-version">v1.4.2</span>
-                    </div>
-                    <h3 class="project-title">Kokonut Components</h3>
-                    <p class="project-desc">A premium library of modular, aesthetic, and highly animated Tailwind CSS
-                        elements crafted for high-performance dashboards and designer-level portfolios.</p>
-                    <div class="project-visual">
-                        <div class="project-code-preview">
-                            <pre><code>const BentoCard = ({ title }) => {
-  return &lt;div className="tile-hover"&gt;{title}&lt;/div&gt;;
-}</code></pre>
+                        <div class="proj-card-body">
+                            <div class="proj-card-num">01 <span class="proj-card-num-line"></span></div>
+                            <h3 class="proj-card-title">MechFind — Mechanic Platform</h3>
+                            <p class="proj-card-desc">MechFind connects vehicle owners with nearby mechanics via real-time maps. Features an AI assistant for instant troubleshooting, slot booking with live status tracking, and dedicated dashboards for customers and shop owners.</p>
+                            <div class="proj-card-tags">
+                                <span class="proj-tag cyan">React</span>
+                                <span class="proj-tag orange">Node.js</span>
+                                <span class="proj-tag blue">Leaflet</span>
+                                <span class="proj-tag purple">AI</span>
+                            </div>
+                            <div class="proj-card-footer">
+                                <a href="https://github.com/luci15/mechanic-platform" target="_blank" class="btn btn-sm btn-secondary">GitHub</a>
+                                <a href="http://localhost:5174" target="_blank" class="btn btn-sm btn-primary">Live Demo</a>
+                            </div>
                         </div>
                     </div>
-                    <div class="project-footer">
-                        <a href="https://github.com" target="_blank" class="btn btn-sm btn-secondary">GitHub</a>
-                        <a href="https://kokonutui.com" target="_blank" class="btn btn-sm btn-primary">Live Demo</a>
+
+                    <!-- Card 2: Orbit Particle System -->
+                    <div class="proj-card">
+                        <div class="proj-card-img proj-card-img--dark">
+                            <div class="particle-animation proj-card-particles">
+                                <span class="dot d1"></span>
+                                <span class="dot d2"></span>
+                                <span class="dot d3"></span>
+                                <span class="dot d4"></span>
+                                <span class="dot d5"></span>
+                            </div>
+                            <span class="proj-card-badge">🌀 WEBGL</span>
+                        </div>
+                        <div class="proj-card-body">
+                            <div class="proj-card-num">02 <span class="proj-card-num-line"></span></div>
+                            <h3 class="proj-card-title">Orbit Particle System</h3>
+                            <p class="proj-card-desc">An interactive WebGL canvas node network reacting to cursor coordinates and mouse clicks, rendering fluid 3D gravity physics with real-time orbital mechanics.</p>
+                            <div class="proj-card-tags">
+                                <span class="proj-tag purple">WebGL</span>
+                                <span class="proj-tag blue">Three.js</span>
+                            </div>
+                            <div class="proj-card-footer">
+                                <a href="https://github.com" target="_blank" class="btn btn-sm btn-secondary">GitHub</a>
+                            </div>
+                        </div>
                     </div>
+
+                    <!-- Card 3: Retro Game Engine -->
+                    <div class="proj-card">
+                        <div class="proj-card-img proj-card-img--terminal">
+                            <pre class="proj-card-terminal">$ node retro-engine.js
+<span style="color:#4ade80">▶ Initializing buffer... OK</span>
+<span style="color:#facc15">▶ Loading assets...    OK</span>
+<span style="color:#38bdf8">Press [SPACE] to start</span>
+<span class="proj-terminal-cursor">█</span></pre>
+                            <span class="proj-card-badge">🖥 CLI</span>
+                        </div>
+                        <div class="proj-card-body">
+                            <div class="proj-card-num">03 <span class="proj-card-num-line"></span></div>
+                            <h3 class="proj-card-title">Retro Game Engine</h3>
+                            <p class="proj-card-desc">A terminal-based game environment built in pure Node.js featuring custom screen buffering, retro ASCII layouts, and raw keyboard event listeners — playable inside any shell terminal.</p>
+                            <div class="proj-card-tags">
+                                <span class="proj-tag green">Node.js</span>
+                                <span class="proj-tag yellow">CLI</span>
+                            </div>
+                            <div class="proj-card-footer">
+                                <a href="https://github.com" target="_blank" class="btn btn-sm btn-secondary">GitHub</a>
+                                <a href="#" class="btn btn-sm btn-secondary">Read Docs</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 4: Agenta -->
+                    <div class="proj-card">
+                        <div class="proj-card-img proj-card-img--grid">
+                            <div class="grid-sub-display proj-card-grid-preview">
+                                <div>Tile 1</div>
+                                <div>Tile 2</div>
+                                <div>Tile 3</div>
+                                <div>Tile 4</div>
+                            </div>
+                            <span class="proj-card-badge">⭐ FEATURED</span>
+                        </div>
+                        <div class="proj-card-body">
+                            <div class="proj-card-num">04 <span class="proj-card-num-line"></span></div>
+                            <h3 class="proj-card-title">Agenta Landing Platform</h3>
+                            <p class="proj-card-desc">A landing site for neural augmentations. Utilizes customized layout modules, dashed grid borders, sepia color filtering, and responsive marquee structures built with Next.js.</p>
+                            <div class="proj-card-tags">
+                                <span class="proj-tag cyan">Next.js</span>
+                                <span class="proj-tag pink">CSS Variables</span>
+                            </div>
+                            <div class="proj-card-footer">
+                                <a href="https://github.com" target="_blank" class="btn btn-sm btn-secondary">GitHub</a>
+                                <a href="https://template-agenta.vercel.app/" target="_blank" class="btn btn-sm btn-primary">Live Template</a>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
+            </div>
 
-                <!-- Project 2: Orbit Canvas -->
-                <div class="tile tile-project col-span-1">
-                    <div class="project-header">
-                        <div class="project-tags">
-                            <span class="proj-tag purple">WebGL</span>
-                            <span class="proj-tag blue">Three.js</span>
-                        </div>
-                    </div>
-                    <h3 class="project-title">Orbit Particle System</h3>
-                    <p class="project-desc">An interactive WebGL canvas node network reacting to cursor coordinates and
-                        mouse clicks, rendering fluid 3D gravity physics.</p>
-                    <div class="project-visual particle-visual-box">
-                        <div class="particle-animation">
-                            <span class="dot d1"></span>
-                            <span class="dot d2"></span>
-                            <span class="dot d3"></span>
-                            <span class="dot d4"></span>
-                            <span class="dot d5"></span>
-                        </div>
-                    </div>
-                    <div class="project-footer">
-                        <a href="https://github.com" target="_blank" class="btn btn-sm btn-secondary">GitHub</a>
-                    </div>
-                </div>
-
-                <!-- Project 3: Terminal Game -->
-                <div class="tile tile-project col-span-1">
-                    <div class="project-header">
-                        <div class="project-tags">
-                            <span class="proj-tag green">Node.js</span>
-                            <span class="proj-tag yellow">CLI</span>
-                        </div>
-                    </div>
-                    <h3 class="project-title">Retro Game Engine</h3>
-                    <p class="project-desc">A terminal-based game environment built in pure Node.js featuring retro
-                        layout rendering and keyboard event handlers.</p>
-                    <div class="project-footer mt-auto">
-                        <a href="https://github.com" target="_blank" class="btn btn-sm btn-secondary">GitHub</a>
-                        <a href="#" class="btn btn-sm btn-secondary border-dashed">Read Docs</a>
-                    </div>
-                </div>
-
-                <!-- Project 4: Agenta Template -->
-                <div class="tile tile-project col-span-2">
-                    <div class="project-header">
-                        <div class="project-tags">
-                            <span class="proj-tag cyan">Next.js</span>
-                            <span class="proj-tag pink">CSS Variables</span>
-                        </div>
-                        <span class="badge-new">Featured</span>
-                    </div>
-                    <h3 class="project-title">Agenta Landing Platform</h3>
-                    <p class="project-desc">A landing site for neural augmentations. Utilizes customized layout modules,
-                        dashed grid borders, sepia color filtering, and responsive marquee structures.</p>
-                    <div class="project-visual grid-pattern-showcase">
-                        <div class="grid-sub-display">
-                            <div>Tile 1</div>
-                            <div>Tile 2</div>
-                            <div>Tile 3</div>
-                            <div>Tile 4</div>
-                        </div>
-                    </div>
-                    <div class="project-footer">
-                        <a href="https://github.com" target="_blank" class="btn btn-sm btn-secondary">GitHub</a>
-                        <a href="https://template-agenta.vercel.app/" target="_blank"
-                            class="btn btn-sm btn-primary">Live Template</a>
-                    </div>
-                </div>
-
+            <!-- Dot Indicators -->
+            <div class="proj-slider-dots" id="projDots">
+                <span class="proj-dot active"></span>
+                <span class="proj-dot"></span>
+                <span class="proj-dot"></span>
+                <span class="proj-dot"></span>
             </div>
         </section>
 

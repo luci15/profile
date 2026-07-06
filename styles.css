@@ -1206,6 +1206,63 @@ a {
     overflow-x: auto;
 }
 
+/* Project features list styling */
+.project-features-list {
+    margin-bottom: 16px;
+    padding-left: 20px;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    list-style-type: disc;
+    text-align: left;
+}
+
+.project-features-list li {
+    margin-bottom: 6px;
+}
+
+.project-features-list li strong {
+    color: var(--accent-cyan);
+}
+
+.project-video-preview {
+    width: 100%;
+    height: auto;
+    max-height: 220px;
+    border-radius: 8px;
+    object-fit: cover;
+    display: block;
+}
+
+/* MechFind landing page video overlay */
+.mechfind-video-container {
+    position: relative;
+    padding: 0;
+    overflow: hidden;
+    min-height: 160px;
+}
+
+.mechfind-video-overlay {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+}
+
+.mechfind-badge {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #000;
+    background: #eceb0b;
+    padding: 4px 10px;
+    border-radius: 2px;
+    text-transform: uppercase;
+}
+
 .particle-visual-box {
     position: relative;
     min-height: 100px;
@@ -1963,3 +2020,298 @@ a {
     visibility: hidden;
     pointer-events: none;
 }
+
+/* ==========================================================================
+   Projects Card Slider (Reference: Premium Tech Card Carousel)
+   ========================================================================== */
+
+.proj-slider-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 24px;
+}
+
+.proj-slider-arrows {
+    display: flex;
+    gap: 12px;
+}
+
+.proj-arrow {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--keycap-bg);
+    border: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.proj-arrow:hover {
+    background: var(--tile-bg);
+    color: var(--accent-cyan);
+    border-color: var(--accent-cyan-glow);
+    transform: scale(1.05);
+    box-shadow: 0 0 12px var(--accent-cyan-glow);
+}
+
+.proj-slider-viewport {
+    width: 100%;
+    overflow: hidden;
+    padding: 8px 0 20px 0;
+}
+
+.proj-slider-track {
+    display: flex;
+    gap: 24px;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+}
+
+/* Card Design matching screenshot */
+.proj-card {
+    flex: 0 0 calc((100% - 48px) / 3); /* 3 cards visible on desktop */
+    background: #0b0d12;
+    border: 1px solid var(--border-color);
+    border-radius: 24px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 540px;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.proj-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--accent-cyan-glow);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(6, 182, 212, 0.15);
+}
+
+/* Top Image / Visual Area */
+.proj-card-img {
+    height: 200px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    background: #141622;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.proj-card-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.85;
+}
+
+.proj-card-badge {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    background: rgba(8, 9, 13, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid var(--border-color);
+    color: var(--accent-cyan);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    z-index: 10;
+}
+
+/* Orbit particle visual area */
+.proj-card-img--dark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at center, #111424 0%, #08090d 100%);
+}
+
+.proj-card-particles {
+    transform: scale(0.85);
+}
+
+/* Terminal Game Visual Area */
+.proj-card-img--terminal {
+    background: #08090d;
+    padding: 16px;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+}
+
+.proj-card-terminal {
+    margin: 0;
+    line-height: 1.4;
+    white-space: pre-wrap;
+}
+
+.proj-terminal-cursor {
+    animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
+
+/* Agenta Grid Visual Area */
+.proj-card-img--grid {
+    background: #0e111a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.proj-card-grid-preview {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    width: 100%;
+    max-width: 220px;
+}
+
+.proj-card-grid-preview div {
+    border: 1px dashed var(--border-color);
+    padding: 8px;
+    border-radius: 8px;
+    font-size: 0.7rem;
+    text-align: center;
+    color: var(--text-muted);
+    background: rgba(255, 255, 255, 0.02);
+}
+
+/* Card Body Section */
+.proj-card-body {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.proj-card-num {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--accent-cyan);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+}
+
+.proj-card-num-line {
+    flex-grow: 1;
+    height: 1px;
+    background: linear-gradient(to right, var(--accent-cyan-glow), transparent);
+}
+
+.proj-card-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 10px;
+    line-height: 1.3;
+}
+
+.proj-card-desc {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.proj-card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: auto;
+    margin-bottom: 20px;
+}
+
+.proj-card-footer {
+    display: flex;
+    gap: 10px;
+}
+
+.proj-card-footer .btn {
+    flex: 1;
+    text-align: center;
+}
+
+/* Dots Indicators */
+.proj-slider-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.proj-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--border-color);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.proj-dot.active {
+    background: var(--accent-cyan);
+    transform: scale(1.2);
+    box-shadow: 0 0 8px var(--accent-cyan-glow);
+}
+
+/* Mobile & Tablet Layout */
+@media (max-width: 1024px) {
+    .proj-card {
+        flex: 0 0 calc((100% - 24px) / 2); /* 2 cards on tablets */
+    }
+}
+
+@media (max-width: 768px) {
+    .proj-slider-viewport {
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .proj-slider-viewport::-webkit-scrollbar {
+        display: none;
+    }
+
+    .proj-slider-track {
+        gap: 16px;
+        transition: none; /* Let native scrolling handle it on mobile */
+    }
+
+    .proj-card {
+        flex: 0 0 85vw; /* Show partial next card to prompt sliding */
+        scroll-snap-align: center;
+        height: 520px;
+    }
+
+    .proj-slider-dots {
+        margin-top: 12px;
+    }
+}
+
