@@ -1119,7 +1119,7 @@ a {
     flex-direction: column;
     gap: 20px;
     scroll-margin-top: 90px;
-    pointer-events: auto; /* Restored pointer events for slider drag and scroll */
+    pointer-events: none; /* Allow events to reach background grid outside cards */
 }
 
 .section-intro {
@@ -2326,6 +2326,7 @@ a {
     align-items: center;
     gap: 24px;
     margin-top: 48px;
+    pointer-events: auto; /* Enable clicks on controls */
 }
 
 .proj-stack-arrow {
