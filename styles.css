@@ -1,4 +1,22 @@
 /* ==========================================================================
+   Typography: Load threejs.paris Dingos font
+   ========================================================================== */
+@font-face {
+    font-family: 'Dingos';
+    src: url('https://threejs.paris/fonts/Dingos/Dingos-Bold.woff2') format('woff2');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Dingos';
+    src: url('https://threejs.paris/fonts/Dingos/Dingos-ExtraBold.woff2') format('woff2');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* ==========================================================================
    Design System & CSS Custom Variables
    ========================================================================== */
 :root {
@@ -114,13 +132,15 @@ body {
     pointer-events: all;
     z-index: 1;
     overflow: hidden;
+    will-change: transform;
+    transform: translate3d(0, 0, 0);
 }
 
 .bg-grid-cell {
     border-right: 1px dashed var(--border-color);
     border-bottom: 1px dashed var(--border-color);
     background-color: transparent;
-    transition: background-color 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transition: background-color 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
     -webkit-tap-highlight-color: transparent;
 }
 
@@ -169,6 +189,14 @@ a {
     letter-spacing: -0.05em;
     color: var(--text-primary);
 }
+
+.logo-text {
+    font-family: 'Dingos', var(--font-sans);
+    font-weight: 900;
+    letter-spacing: 0.05em;
+}
+
+
 
 .logo-icon {
     color: var(--accent-cyan);
@@ -315,6 +343,8 @@ a {
     z-index: 5;
     position: relative;
     pointer-events: none; /* Allow events to reach background grid */
+    will-change: transform;
+    transform: translate3d(0, 0, 0);
 }
 
 /* Tile Component styles */
@@ -1089,6 +1119,7 @@ a {
     flex-direction: column;
     gap: 20px;
     scroll-margin-top: 90px;
+    pointer-events: auto; /* Restored pointer events for slider drag and scroll */
 }
 
 .section-intro {
@@ -1635,6 +1666,9 @@ a {
         flex-direction: column !important;
         width: 100% !important;
         margin-top: 10px;
+        min-width: 0 !important; /* Critical to prevent horizontal overflow in mobile grid */
+        overflow: hidden !important; /* Contain carousel elements from blowing layout */
+        pointer-events: auto !important; /* Restore touch gestures and click behaviors */
     }
 
     .projects-grid {
@@ -2022,80 +2056,116 @@ a {
 }
 
 /* ==========================================================================
-   Projects Card Slider (Reference: Premium Tech Card Carousel)
+   Projects Card Stack (Reference: Kokonut UI Animated Testimonials Stack)
    ========================================================================== */
 
-.proj-slider-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 24px;
+.proj-stack-header {
+    margin-bottom: 32px;
 }
 
-.proj-slider-arrows {
-    display: flex;
-    gap: 12px;
-}
-
-.proj-arrow {
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    background: var(--keycap-bg);
-    border: 1px solid var(--border-color);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-primary);
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.proj-arrow:hover {
-    background: var(--tile-bg);
-    color: var(--accent-cyan);
-    border-color: var(--accent-cyan-glow);
-    transform: scale(1.05);
-    box-shadow: 0 0 12px var(--accent-cyan-glow);
-}
-
-.proj-slider-viewport {
+.proj-stack-wrapper {
     width: 100%;
-    overflow: hidden;
-    padding: 8px 0 20px 0;
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    padding-bottom: 24px;
 }
 
-.proj-slider-track {
-    display: flex;
-    gap: 24px;
-    will-change: transform;
+.proj-stack-container {
+    width: 100%;
+    height: 580px;
+    position: relative;
+    perspective: 1000px;
 }
 
-/* Card Design matching screenshot */
-.proj-card {
-    flex: 0 0 calc((100% - 48px) / 3); /* 3 cards visible on desktop */
+/* Card Design & Layer Offsets */
+.proj-stack-card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background: #0b0d12;
     border: 1px solid var(--border-color);
     border-radius: 24px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    height: 540px;
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-                border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-                box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(48px) scale(0.88) rotate(-1deg);
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                filter 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 5;
 }
 
-.proj-card:hover {
-    transform: translateY(-6px);
-    border-color: var(--accent-cyan-glow);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(6, 182, 212, 0.15);
+/* Active State (Top of Stack) */
+.proj-stack-card.active {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate(0) scale(1) rotate(0deg);
+    z-index: 10;
 }
 
-/* Top Image / Visual Area */
-.proj-card-img {
-    height: 200px;
+/* Stack Layer 1 (Directly behind active) */
+.proj-stack-card.stack-1 {
+    opacity: 0.85;
+    pointer-events: none;
+    transform: translateY(16px) scale(0.96) rotate(-2deg);
+    border-color: rgba(6, 182, 212, 0.35);
+    z-index: 9;
+}
+
+/* Stack Layer 2 (Two layers behind active) */
+.proj-stack-card.stack-2 {
+    opacity: 0.6;
+    pointer-events: none;
+    transform: translateY(32px) scale(0.92) rotate(1.5deg);
+    border-color: rgba(6, 182, 212, 0.15);
+    z-index: 8;
+}
+
+/* Stack Idle State (Bottom of stack, hidden) */
+.proj-stack-card.stack-idle {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(48px) scale(0.88) rotate(-1deg);
+    z-index: 7;
+}
+
+/* Slide Exit Animations */
+.proj-stack-card.exit-next {
+    transform: translateX(180px) translateY(-20px) rotate(8deg) scale(0.95);
+    opacity: 0;
+    filter: blur(4px);
+    z-index: 11;
+    pointer-events: none;
+}
+
+.proj-stack-card.exit-prev {
+    transform: translateX(-180px) translateY(-20px) rotate(-8deg) scale(0.95);
+    opacity: 0;
+    filter: blur(4px);
+    z-index: 11;
+    pointer-events: none;
+}
+
+/* Slide Enter Animations (Transition bypass) */
+.proj-stack-card.enter-prev {
+    transform: translateX(-180px) translateY(-20px) rotate(-8deg) scale(0.95);
+    opacity: 0;
+    filter: blur(4px);
+    z-index: 11;
+    pointer-events: none;
+    transition: none !important;
+}
+
+/* Visual Media Container */
+.proj-card-visual {
+    height: 240px;
     width: 100%;
     position: relative;
     overflow: hidden;
@@ -2193,124 +2263,135 @@ a {
     background: rgba(255, 255, 255, 0.02);
 }
 
-/* Card Body Section */
-.proj-card-body {
-    padding: 24px;
+/* Card Content Area */
+.proj-card-content {
+    padding: 28px 36px;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     flex-grow: 1;
 }
 
-.proj-card-num {
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: var(--accent-cyan);
+.proj-card-quote {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    font-style: italic;
+    color: var(--text-primary);
+    margin: 0 0 24px 0;
+    letter-spacing: -0.01em;
+}
+
+.proj-card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+}
+
+.proj-meta-left {
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 12px;
-    letter-spacing: 1px;
+    gap: 16px;
 }
 
-.proj-card-num-line {
-    flex-grow: 1;
-    height: 1px;
-    background: linear-gradient(to right, var(--accent-cyan-glow), transparent);
+.proj-num {
+    font-family: var(--font-mono);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--accent-cyan);
+    min-width: 24px;
 }
 
-.proj-card-title {
+.proj-title {
     font-size: 1.25rem;
     font-weight: 700;
     color: #ffffff;
-    margin-bottom: 10px;
-    line-height: 1.3;
+    margin: 0 0 4px 0;
 }
 
-.proj-card-desc {
-    font-size: 0.85rem;
-    line-height: 1.5;
-    color: var(--text-secondary);
-    margin-bottom: 16px;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.proj-tags-list {
+    font-size: 0.75rem;
+    color: var(--text-muted);
 }
 
-.proj-card-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-top: auto;
-    margin-bottom: 20px;
-}
-
-.proj-card-footer {
+.proj-meta-right {
     display: flex;
     gap: 10px;
 }
 
-.proj-card-footer .btn {
-    flex: 1;
-    text-align: center;
-}
-
-/* Dots Indicators */
-.proj-slider-dots {
+/* Controls (Centered Arrows & Counter) */
+.proj-stack-controls {
     display: flex;
     justify-content: center;
-    gap: 8px;
-    margin-top: 16px;
+    align-items: center;
+    gap: 24px;
+    margin-top: 48px;
 }
 
-.proj-dot {
-    width: 8px;
-    height: 8px;
+.proj-stack-arrow {
+    width: 46px;
+    height: 46px;
     border-radius: 50%;
-    background: var(--border-color);
+    background: var(--keycap-bg);
+    border: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-primary);
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.proj-dot.active {
-    background: var(--accent-cyan);
-    transform: scale(1.2);
-    box-shadow: 0 0 8px var(--accent-cyan-glow);
+.proj-stack-arrow:hover {
+    background: var(--tile-bg);
+    color: var(--accent-cyan);
+    border-color: var(--accent-cyan-glow);
+    transform: scale(1.05);
+    box-shadow: 0 0 12px var(--accent-cyan-glow);
 }
 
-/* Mobile & Tablet Layout */
-@media (max-width: 1024px) {
-    .proj-card {
-        flex: 0 0 calc((100% - 24px) / 2); /* 2 cards on tablets */
-    }
+.proj-stack-counter {
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    letter-spacing: 2px;
+    min-width: 60px;
+    text-align: center;
 }
 
+/* Responsive Scaling rules */
 @media (max-width: 768px) {
-    .proj-slider-viewport {
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
+    .proj-stack-container {
+        height: 540px;
     }
-
-    .proj-slider-viewport::-webkit-scrollbar {
-        display: none;
+    
+    .proj-card-visual {
+        height: 180px;
     }
-
-    .proj-slider-track {
+    
+    .proj-card-content {
+        padding: 20px;
+    }
+    
+    .proj-card-quote {
+        font-size: 0.95rem;
+        margin-bottom: 16px;
+    }
+    
+    .proj-card-meta {
+        flex-direction: column;
+        align-items: flex-start;
         gap: 16px;
-        transition: none; /* Let native scrolling handle it on mobile */
+        width: 100%;
     }
-
-    .proj-card {
-        flex: 0 0 85vw; /* Show partial next card to prompt sliding */
-        scroll-snap-align: center;
-        height: 520px;
+    
+    .proj-meta-right {
+        width: 100%;
+        gap: 8px;
     }
-
-    .proj-slider-dots {
-        margin-top: 12px;
+    
+    .proj-meta-right .btn {
+        flex: 1;
+        text-align: center;
     }
 }
-

@@ -501,6 +501,11 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             logToTerminal(`Tab loaded: ${btn.textContent}`);
+            
+            // Recalculate section offsets once layout settles
+            if (typeof cacheSectionOffsets === 'function') {
+                setTimeout(cacheSectionOffsets, 100);
+            }
         });
     });
 
@@ -656,7 +661,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                             // Fade out neighbor
                             setTimeout(() => {
-                                neighborCell.style.transition = 'background-color 0.8s cubic-bezier(0.2, 0.8, 0.2, 1)';
+                                neighborCell.style.transition = 'background-color 0.3s cubic-bezier(0.2, 0.8, 0.2, 1)';
                                 neighborCell.style.backgroundColor = 'transparent';
                             }, 50);
                         }
@@ -792,166 +797,189 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    window.addEventListener('scroll', scrollSpy);
-    // Initial call
+    // Cache section offsets sorted vertically to prevent forced synchronous reflows on scroll
+    let sectionOffsets = [];
+    function cacheSectionOffsets() {
+        sectionOffsets = sections.map(section => {
+            if (!section) return null;
+            return {
+                id: section.getAttribute('id'),
+                top: section.offsetTop,
+                bottom: section.offsetTop + section.offsetHeight
+            };
+        })
+        .filter(Boolean)
+        .sort((a, b) => a.top - b.top);
+    }
+
+    // Scroll spy logic threshold lookup
+    function scrollSpy() {
+        let currentSectionId = 'about';
+        const scrollPosition = window.scrollY + 160; // offset threshold for active trigger
+
+        // Find the last section that has been scrolled past
+        for (const sec of sectionOffsets) {
+            if (scrollPosition >= sec.top) {
+                currentSectionId = sec.id;
+            }
+        }
+
+        navLinks.forEach(link => {
+            const href = link.getAttribute('href').substring(1);
+            if (href === currentSectionId) {
+                if (!link.classList.contains('active')) {
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+                    updateNavbarShapes();
+                }
+            }
+        });
+    }
+
+    // Initialize offsets on DOM load, window load, and register optimized scroll listener
+    cacheSectionOffsets();
+    window.addEventListener('load', cacheSectionOffsets);
+    
+    let isSpyScrolling = false;
+    window.addEventListener('scroll', () => {
+        if (!isSpyScrolling) {
+            window.requestAnimationFrame(() => {
+                scrollSpy();
+                isSpyScrolling = false;
+            });
+            isSpyScrolling = true;
+        }
+    }, { passive: true });
+
+    // Initial spy run to set correct active tab
     updateNavbarShapes();
     scrollSpy();
+
     // ==========================================================================
-    // Projects Card Slider Script with Custom Spring Physics (Reference: threejs.paris momentum style)
+    // Projects Card Stack Rotation Engine (Kokonut UI Testimonials Style)
     // ==========================================================================
-    const projSliderTrack = document.getElementById('projSliderTrack');
-    const projPrevBtn = document.getElementById('projPrev');
-    const projNextBtn = document.getElementById('projNext');
-    const projDots = document.querySelectorAll('#projDots .proj-dot');
-    const projCards = document.querySelectorAll('.proj-card');
+    const stackContainer = document.getElementById('projStackContainer');
+    const stackPrev = document.getElementById('stackPrev');
+    const stackNext = document.getElementById('stackNext');
+    const stackCounter = document.getElementById('stackCounter');
 
-    let currentProjIndex = 0;
-    let currentX = 0;
-    let targetX = 0;
-    let velocity = 0;
-    let springAnimId = null;
+    if (stackContainer && stackPrev && stackNext && stackCounter) {
+        const cards = Array.from(stackContainer.querySelectorAll('.proj-stack-card'));
+        const cardCount = cards.length;
+        let activeIndex = 0;
+        let isAnimating = false;
 
-    function animateSpring() {
-        const stiffness = 0.08; // Control wobbly spring tightness
-        const damping = 0.76;   // Control organic deceleration and bounce
+        // Function to update the stack layouts based on current activeIndex
+        function updateStackLayout() {
+            cards.forEach((card, index) => {
+                // Clear any previous state classes
+                card.className = 'proj-stack-card';
 
-        const force = (targetX - currentX) * stiffness;
-        velocity = (velocity + force) * damping;
-        currentX += velocity;
+                // Calculate relative position in stack relative to activeIndex
+                const relativeIndex = (index - activeIndex + cardCount) % cardCount;
 
-        if (projSliderTrack) {
-            projSliderTrack.style.transform = `translateX(${currentX}px)`;
+                if (relativeIndex === 0) {
+                    card.classList.add('active');
+                } else if (relativeIndex === 1) {
+                    card.classList.add('stack-1');
+                } else if (relativeIndex === 2) {
+                    card.classList.add('stack-2');
+                } else {
+                    card.classList.add('stack-idle');
+                }
+            });
+
+            // Update bottom layout page counter
+            stackCounter.textContent = `${activeIndex + 1} / ${cardCount}`;
         }
 
-        // Keep running until target is reached and momentum decays
-        if (Math.abs(targetX - currentX) > 0.05 || Math.abs(velocity) > 0.05) {
-            springAnimId = requestAnimationFrame(animateSpring);
-        } else {
-            currentX = targetX;
-            velocity = 0;
-            if (projSliderTrack) {
-                projSliderTrack.style.transform = `translateX(${currentX}px)`;
+        // Action to slide forward (Next)
+        function nextSlide() {
+            if (isAnimating) return;
+            isAnimating = true;
+
+            // 1. Trigger exit transition on active card
+            const currentCard = cards[activeIndex];
+            currentCard.classList.add('exit-next');
+
+            // 2. Advance active index
+            activeIndex = (activeIndex + 1) % cardCount;
+
+            // 3. Update the rest of the stack classes immediately so they shift up
+            cards.forEach((card, index) => {
+                if (index !== (activeIndex - 1 + cardCount) % cardCount) {
+                    const relativeIndex = (index - activeIndex + cardCount) % cardCount;
+                    card.className = 'proj-stack-card';
+                    if (relativeIndex === 0) card.classList.add('active');
+                    else if (relativeIndex === 1) card.classList.add('stack-1');
+                    else if (relativeIndex === 2) card.classList.add('stack-2');
+                    else card.classList.add('stack-idle');
+                }
+            });
+
+            // 4. Update full layouts once the slide transition completes
+            setTimeout(() => {
+                updateStackLayout();
+                isAnimating = false;
+            }, 600); // matches the CSS transition duration
+        }
+
+        // Action to slide backward (Prev)
+        function prevSlide() {
+            if (isAnimating) return;
+            isAnimating = true;
+
+            // 1. The card that will become active is the previous card
+            const prevIndex = (activeIndex - 1 + cardCount) % cardCount;
+            const prevCard = cards[prevIndex];
+
+            // 2. Put the prevCard in offscreen enter state without transition
+            prevCard.className = 'proj-stack-card enter-prev';
+
+            // 3. Trigger reflow to apply the layout position
+            void prevCard.offsetWidth;
+
+            // 4. Update the active index
+            activeIndex = prevIndex;
+
+            // 5. Update layout, triggering transition into the active position
+            updateStackLayout();
+
+            setTimeout(() => {
+                isAnimating = false;
+            }, 600);
+        }
+
+        // Event Listeners
+        stackNext.addEventListener('click', nextSlide);
+        stackPrev.addEventListener('click', prevSlide);
+
+        // Optional touch gestures / swipe support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        stackContainer.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        stackContainer.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, { passive: true });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            if (touchStartX - touchEndX > swipeThreshold) {
+                // Swipe Left -> Next
+                nextSlide();
+            } else if (touchEndX - touchStartX > swipeThreshold) {
+                // Swipe Right -> Prev
+                prevSlide();
             }
-            springAnimId = null;
-        }
-    }
-
-    function triggerSpring(target) {
-        targetX = target;
-        if (!springAnimId) {
-            springAnimId = requestAnimationFrame(animateSpring);
-        }
-    }
-
-    function getVisibleCards() {
-        const width = window.innerWidth;
-        if (width <= 768) return 1;
-        if (width <= 1024) return 2;
-        return 3;
-    }
-
-    function updateProjSlider() {
-        if (!projSliderTrack) return;
-        const visible = getVisibleCards();
-        const maxIndex = Math.max(0, projCards.length - visible);
-        
-        // Clamp index
-        if (currentProjIndex > maxIndex) currentProjIndex = maxIndex;
-        if (currentProjIndex < 0) currentProjIndex = 0;
-
-        // Slide transform calculation
-        if (window.innerWidth > 768) {
-            const cardElement = projCards[0];
-            if (cardElement) {
-                const cardWidth = cardElement.offsetWidth;
-                const gap = 24; // matching styles.css gap
-                const newTargetX = -currentProjIndex * (cardWidth + gap);
-                triggerSpring(newTargetX);
-            }
-        } else {
-            if (springAnimId) {
-                cancelAnimationFrame(springAnimId);
-                springAnimId = null;
-            }
-            currentX = 0;
-            targetX = 0;
-            velocity = 0;
-            projSliderTrack.style.transform = 'none';
         }
 
-        // Update dots
-        projDots.forEach((dot, idx) => {
-            if (idx === currentProjIndex) {
-                dot.classList.add('active');
-            } else {
-                dot.classList.remove('active');
-            }
-        });
-
-        // Update arrows disabled state
-        if (projPrevBtn && projNextBtn) {
-            projPrevBtn.style.opacity = currentProjIndex === 0 ? '0.4' : '1';
-            projPrevBtn.style.pointerEvents = currentProjIndex === 0 ? 'none' : 'auto';
-            projNextBtn.style.opacity = currentProjIndex === maxIndex ? '0.4' : '1';
-            projNextBtn.style.pointerEvents = currentProjIndex === maxIndex ? 'none' : 'auto';
-        }
+        // Initialize Layout
+        updateStackLayout();
     }
-
-    // Prev / Next Listeners
-    if (projPrevBtn) {
-        projPrevBtn.addEventListener('click', () => {
-            currentProjIndex--;
-            updateProjSlider();
-        });
-    }
-
-    if (projNextBtn) {
-        projNextBtn.addEventListener('click', () => {
-            currentProjIndex++;
-            updateProjSlider();
-        });
-    }
-
-    // Dot Clicks
-    projDots.forEach((dot, index) => {
-        dot.addEventListener('click', () => {
-            const visible = getVisibleCards();
-            const maxIndex = Math.max(0, projCards.length - visible);
-            currentProjIndex = Math.min(index, maxIndex);
-            updateProjSlider();
-        });
-    });
-
-    // Handle Mobile Swipe Syncing Dots
-    const viewport = document.querySelector('.proj-slider-viewport');
-    if (viewport) {
-        viewport.addEventListener('scroll', () => {
-            if (window.innerWidth <= 768) {
-                const scrollLeft = viewport.scrollLeft;
-                const cardWidth = projCards[0]?.offsetWidth || 1;
-                const activeIndex = Math.round(scrollLeft / cardWidth);
-                projDots.forEach((dot, idx) => {
-                    if (idx === activeIndex) {
-                        dot.classList.add('active');
-                    } else {
-                        dot.classList.remove('active');
-                    }
-                });
-                currentProjIndex = activeIndex;
-            }
-        });
-    }
-
-    // Resize updates
-    window.addEventListener('resize', () => {
-        if (window.innerWidth > 768 && projSliderTrack && viewport) {
-            // Reset mobile scroll position if transitioning to desktop
-            viewport.scrollLeft = 0;
-        }
-        updateProjSlider();
-    });
-
-    // Init
-    updateProjSlider();
 });
 

@@ -13,7 +13,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Caveat:wght@400;700&family=Share+Tech+Mono&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=1.1.2">
+    <link rel="stylesheet" href="styles.css?v=1.6.9">
 </head>
 
 <body>
@@ -69,7 +69,6 @@
         <a href="#projects" class="nav-link">Projects</a>
 
     </nav>
-
 
 
     <!-- Main Container -->
@@ -752,54 +751,51 @@
             </div>
         </section>
 
-        <!-- Projects Card Slider Section -->
-        <section class="projects-section col-span-3" id="projects">
-            <div class="proj-slider-header">
-                <div>
-                    <span class="tile-tag">Creations</span>
-                    <h2 class="sec-title">Core Projects &amp; Works</h2>
-                </div>
-                <div class="proj-slider-arrows">
-                    <button class="proj-arrow" id="projPrev" aria-label="Previous">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-                    </button>
-                    <button class="proj-arrow" id="projNext" aria-label="Next">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-                    </button>
-                </div>
+        <!-- Projects Card Stack Section (Kokonut UI Testimonials Style) -->
+        <section class="projects-section col-span-4" id="projects">
+            <div class="proj-stack-header">
+                <span class="tile-tag">Creations</span>
+                <h2 class="sec-title">Projects &amp; Works</h2>
             </div>
 
-            <div class="proj-slider-viewport">
-                <div class="proj-slider-track" id="projSliderTrack">
+            <div class="proj-stack-wrapper">
+                <div class="proj-stack-container" id="projStackContainer">
 
                     <!-- Card 1: MechFind -->
-                    <div class="proj-card">
-                        <div class="proj-card-img">
-                            <video autoplay loop muted playsinline poster="images/mechfind_hero.png" class="proj-card-video">
+                    <div class="proj-stack-card active" data-index="0">
+                        <div class="proj-card-visual">
+                            <video autoplay loop muted playsinline poster="images/mechfind_hero.png"
+                                class="proj-card-video">
                                 <source src="images/hyundai_sedan.mp4" type="video/mp4">
                             </video>
-                            <span class="proj-card-badge">⚡ MECHFIND</span>
                         </div>
-                        <div class="proj-card-body">
-                            <div class="proj-card-num">01 <span class="proj-card-num-line"></span></div>
-                            <h3 class="proj-card-title">MechFind — Mechanic Platform</h3>
-                            <p class="proj-card-desc">MechFind connects vehicle owners with nearby mechanics via real-time maps. Features an AI assistant for instant troubleshooting, slot booking with live status tracking, and dedicated dashboards for customers and shop owners.</p>
-                            <div class="proj-card-tags">
-                                <span class="proj-tag cyan">React</span>
-                                <span class="proj-tag orange">Node.js</span>
-                                <span class="proj-tag blue">Leaflet</span>
-                                <span class="proj-tag purple">AI</span>
-                            </div>
-                            <div class="proj-card-footer">
-                                <a href="https://github.com/luci15/mechanic-platform" target="_blank" class="btn btn-sm btn-secondary">GitHub</a>
-                                <a href="http://localhost:5174" target="_blank" class="btn btn-sm btn-primary">Live Demo</a>
+                        <div class="proj-card-content">
+                            <p class="proj-card-quote">"MechFind is a comprehensive digital ecosystem that connects
+                                vehicle owners with certified local mechanics using real-time geolocation mapping. Built
+                                with a responsive React frontend, it features a native AI assistant for immediate
+                                diagnosis, interactive slot scheduling, status notifications, and customized management
+                                consoles for shop owners."</p>
+                            <div class="proj-card-meta">
+                                <div class="proj-meta-left">
+                                    <div class="proj-num">01</div>
+                                    <div>
+                                        <h3 class="proj-title">MechFind</h3>
+                                        <div class="proj-tags-list">React • Node.js • Leaflet • AI</div>
+                                    </div>
+                                </div>
+                                <div class="proj-meta-right">
+                                    <a href="https://github.com/luci15/mechanic-platform" target="_blank"
+                                        class="btn btn-sm btn-secondary">GitHub</a>
+                                    <a href="http://localhost:5174" target="_blank" class="btn btn-sm btn-primary">Live
+                                        Demo</a>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Card 2: Orbit Particle System -->
-                    <div class="proj-card">
-                        <div class="proj-card-img proj-card-img--dark">
+                    <div class="proj-stack-card stack-1" data-index="1">
+                        <div class="proj-card-visual proj-card-img--dark">
                             <div class="particle-animation proj-card-particles">
                                 <span class="dot d1"></span>
                                 <span class="dot d2"></span>
@@ -807,82 +803,113 @@
                                 <span class="dot d4"></span>
                                 <span class="dot d5"></span>
                             </div>
-                            <span class="proj-card-badge">🌀 WEBGL</span>
                         </div>
-                        <div class="proj-card-body">
-                            <div class="proj-card-num">02 <span class="proj-card-num-line"></span></div>
-                            <h3 class="proj-card-title">Orbit Particle System</h3>
-                            <p class="proj-card-desc">An interactive WebGL canvas node network reacting to cursor coordinates and mouse clicks, rendering fluid 3D gravity physics with real-time orbital mechanics.</p>
-                            <div class="proj-card-tags">
-                                <span class="proj-tag purple">WebGL</span>
-                                <span class="proj-tag blue">Three.js</span>
-                            </div>
-                            <div class="proj-card-footer">
-                                <a href="https://github.com" target="_blank" class="btn btn-sm btn-secondary">GitHub</a>
+                        <div class="proj-card-content">
+                            <p class="proj-card-quote">"An interactive WebGL simulation of celestial orbital mechanics,
+                                rendering thousands of custom canvas particles reacting dynamically to real-time cursor
+                                coordinates and click events. Leverages Three.js math utilities to compute
+                                high-performance 3D gravity vectors, responsive particle velocity fields, and smooth
+                                geometric orbits."</p>
+                            <div class="proj-card-meta">
+                                <div class="proj-meta-left">
+                                    <div class="proj-num">02</div>
+                                    <div>
+                                        <h3 class="proj-title">Orbit Particle System</h3>
+                                        <div class="proj-tags-list">WebGL • Three.js</div>
+                                    </div>
+                                </div>
+                                <div class="proj-meta-right">
+                                    <a href="https://github.com" target="_blank"
+                                        class="btn btn-sm btn-secondary">GitHub</a>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Card 3: Retro Game Engine -->
-                    <div class="proj-card">
-                        <div class="proj-card-img proj-card-img--terminal">
+                    <div class="proj-stack-card stack-2" data-index="2">
+                        <div class="proj-card-visual proj-card-img--terminal">
                             <pre class="proj-card-terminal">$ node retro-engine.js
 <span style="color:#4ade80">▶ Initializing buffer... OK</span>
 <span style="color:#facc15">▶ Loading assets...    OK</span>
 <span style="color:#38bdf8">Press [SPACE] to start</span>
 <span class="proj-terminal-cursor">█</span></pre>
-                            <span class="proj-card-badge">🖥 CLI</span>
                         </div>
-                        <div class="proj-card-body">
-                            <div class="proj-card-num">03 <span class="proj-card-num-line"></span></div>
-                            <h3 class="proj-card-title">Retro Game Engine</h3>
-                            <p class="proj-card-desc">A terminal-based game environment built in pure Node.js featuring custom screen buffering, retro ASCII layouts, and raw keyboard event listeners — playable inside any shell terminal.</p>
-                            <div class="proj-card-tags">
-                                <span class="proj-tag green">Node.js</span>
-                                <span class="proj-tag yellow">CLI</span>
-                            </div>
-                            <div class="proj-card-footer">
-                                <a href="https://github.com" target="_blank" class="btn btn-sm btn-secondary">GitHub</a>
-                                <a href="#" class="btn btn-sm btn-secondary">Read Docs</a>
+                        <div class="proj-card-content">
+                            <p class="proj-card-quote">"A low-level terminal rendering engine built entirely from
+                                scratch in pure Node.js to run vintage retro game architectures inside standard console
+                                shells. Employs a custom double-buffering algorithm, frame-rate throttle managers, raw
+                                standard input keyboard event listeners, and retro ASCII sprite sheets for pixel-perfect
+                                console gameplay."</p>
+                            <div class="proj-card-meta">
+                                <div class="proj-meta-left">
+                                    <div class="proj-num">03</div>
+                                    <div>
+                                        <h3 class="proj-title">Retro Game Engine</h3>
+                                        <div class="proj-tags-list">Node.js • CLI</div>
+                                    </div>
+                                </div>
+                                <div class="proj-meta-right">
+                                    <a href="https://github.com" target="_blank"
+                                        class="btn btn-sm btn-secondary">GitHub</a>
+                                    <a href="#" class="btn btn-sm btn-secondary">Read Docs</a>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Card 4: Agenta -->
-                    <div class="proj-card">
-                        <div class="proj-card-img proj-card-img--grid">
+                    <!-- Card 4: Agenta Landing Platform -->
+                    <div class="proj-stack-card stack-idle" data-index="3">
+                        <div class="proj-card-visual proj-card-img--grid">
                             <div class="grid-sub-display proj-card-grid-preview">
                                 <div>Tile 1</div>
                                 <div>Tile 2</div>
                                 <div>Tile 3</div>
                                 <div>Tile 4</div>
                             </div>
-                            <span class="proj-card-badge">⭐ FEATURED</span>
                         </div>
-                        <div class="proj-card-body">
-                            <div class="proj-card-num">04 <span class="proj-card-num-line"></span></div>
-                            <h3 class="proj-card-title">Agenta Landing Platform</h3>
-                            <p class="proj-card-desc">A landing site for neural augmentations. Utilizes customized layout modules, dashed grid borders, sepia color filtering, and responsive marquee structures built with Next.js.</p>
-                            <div class="proj-card-tags">
-                                <span class="proj-tag cyan">Next.js</span>
-                                <span class="proj-tag pink">CSS Variables</span>
-                            </div>
-                            <div class="proj-card-footer">
-                                <a href="https://github.com" target="_blank" class="btn btn-sm btn-secondary">GitHub</a>
-                                <a href="https://template-agenta.vercel.app/" target="_blank" class="btn btn-sm btn-primary">Live Template</a>
+                        <div class="proj-card-content">
+                            <p class="proj-card-quote">"A futuristic, premium web landing environment tailored for
+                                cybernetic and neural augmentation products. Crafted with Next.js and optimized using
+                                Vanilla CSS custom properties, it integrates glassmorphism panels, dashed bento border
+                                grids, interactive sepia hover states, and smooth horizontal scrolling marquee lists."
+                            </p>
+                            <div class="proj-card-meta">
+                                <div class="proj-meta-left">
+                                    <div class="proj-num">04</div>
+                                    <div>
+                                        <h3 class="proj-title">Agenta Landing Platform</h3>
+                                        <div class="proj-tags-list">Next.js • CSS Variables</div>
+                                    </div>
+                                </div>
+                                <div class="proj-meta-right">
+                                    <a href="https://github.com" target="_blank"
+                                        class="btn btn-sm btn-secondary">GitHub</a>
+                                    <a href="https://template-agenta.vercel.app/" target="_blank"
+                                        class="btn btn-sm btn-primary">Live Template</a>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                 </div>
-            </div>
 
-            <!-- Dot Indicators -->
-            <div class="proj-slider-dots" id="projDots">
-                <span class="proj-dot active"></span>
-                <span class="proj-dot"></span>
-                <span class="proj-dot"></span>
-                <span class="proj-dot"></span>
+                <!-- Bottom Navigation Controls -->
+                <div class="proj-stack-controls">
+                    <button class="proj-stack-arrow" id="stackPrev" aria-label="Previous Project">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                    </button>
+                    <div class="proj-stack-counter" id="stackCounter">1 / 4</div>
+                    <button class="proj-stack-arrow" id="stackNext" aria-label="Next Project">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </button>
+                </div>
             </div>
         </section>
 
@@ -945,7 +972,7 @@
     </footer>
 
     <!-- App Script -->
-    <script src="app.js?v=1.1.4"></script>
+    <script src="app.js?v=1.6.9"></script>
 </body>
 
 </html>
