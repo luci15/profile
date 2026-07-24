@@ -954,6 +954,27 @@ document.addEventListener('DOMContentLoaded', () => {
         stackNext.addEventListener('click', nextSlide);
         stackPrev.addEventListener('click', prevSlide);
 
+        // Click anywhere on card stack to advance to next project (excluding buttons/links)
+        stackContainer.addEventListener('click', (e) => {
+            if (e.target.closest('a') || e.target.closest('button')) return;
+            nextSlide();
+        });
+
+        // Keyboard Arrow Key Navigation (Left / Right Arrow Keys)
+        document.addEventListener('keydown', (e) => {
+            // Skip keyboard navigation if user is typing in an input or textarea
+            const activeElem = document.activeElement;
+            if (activeElem && (activeElem.tagName === 'INPUT' || activeElem.tagName === 'TEXTAREA' || activeElem.isContentEditable)) {
+                return;
+            }
+
+            if (e.key === 'ArrowRight') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                prevSlide();
+            }
+        });
+
         // Optional touch gestures / swipe support for mobile
         let touchStartX = 0;
         let touchEndX = 0;
